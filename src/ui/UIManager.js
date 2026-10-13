@@ -1044,7 +1044,7 @@ const MenuLogic = {
             { key: 'common', title: 'Common Wildcards', value: GameData.wildcards.common || 0, color: '#adb5bd', emoji: '⬜' },
             { key: 'rare', title: 'Rare Wildcards', value: GameData.wildcards.rare || 0, color: '#3498db', emoji: '🔷' },
             { key: 'epic', title: 'Epic Wildcards', value: GameData.wildcards.epic || 0, color: '#9b59b6', emoji: '🔶' },
-            { key: 'legendary', title: 'Legend Wildcards', value: GameData.wildcards.legendary || 0, color: '#f1c40f', emoji: '🔸' }
+            { key: 'legendary', title: 'Legendary Wildcards', value: GameData.wildcards.legendary || 0, color: '#f1c40f', emoji: '🔸' }
         ];
 
         const summaryDiv = document.getElementById('ui-item-summary');
@@ -1171,14 +1171,14 @@ const MenuLogic = {
                 const canSpend = Progression.isUnlocked(card.id) && !unlocked && (GameData.shardInventory.evo || 0) > 0;
                 const evoCard = CARD_DB[card.id + '_evo'] || card;
                 const div = document.createElement('div');
-                div.className = `card-item ${unlocked ? 'evo' : ''}`;
+                div.className = `shard-card ${unlocked ? 'evo' : ''}`;
                 div.style.cursor = 'pointer';
                 div.innerHTML = `
-                    <div style="font-size: 2rem; margin: 6px 0;">${evoCard.emoji}</div>
-                    <div style="font-size: 0.75rem; font-weight: 900;">${card.name}</div>
-                    <div class="progress-bar" style="width:100%; margin-top:8px;"><div class="progress-fill shard-fill" style="width:${(progress / 6) * 100}%"></div></div>
-                    <div style="font-size:0.7rem; font-weight:bold; margin-top:6px;">${progress}/6</div>
-                    <button class="btn ${canSpend ? 'success' : ''}" style="width:100%; margin-top:8px;" ${canSpend ? '' : 'disabled'}>
+                    <div class="shard-card-emoji">${evoCard.emoji}</div>
+                    <div class="shard-card-name">${card.name}</div>
+                    <div class="progress-bar"><div class="progress-fill shard-fill" style="width:${Math.min(100, (progress / 6) * 100)}%"></div></div>
+                    <div class="shard-card-fraction">${progress}/6</div>
+                    <button class="btn ${canSpend ? 'success' : ''}" ${canSpend ? '' : 'disabled'}>
                         ${unlocked ? 'Unlocked' : canSpend ? 'Use 1' : Progression.isUnlocked(card.id) ? 'Need shard' : 'Unlock base card'}
                     </button>
                 `;
@@ -1211,14 +1211,14 @@ const MenuLogic = {
                 const unlocked = Progression.isUnlocked(card.id);
                 const canSpend = arenaReady && !unlocked && available > 0;
                 const div = document.createElement('div');
-                div.className = `card-item ${unlocked ? 'legendary' : ''}`;
+                div.className = `shard-card ${unlocked ? 'legendary' : ''}`;
                 div.style.cursor = 'pointer';
                 div.innerHTML = `
-                    <div style="font-size: 2rem; margin: 6px 0;">${card.emoji}</div>
-                    <div style="font-size: 0.75rem; font-weight: 900;">${card.name}</div>
-                    <div class="progress-bar" style="width:100%; margin-top:8px;"><div class="progress-fill legend-fill" style="width:${progress * 100}%"></div></div>
-                    <div style="font-size:0.7rem; font-weight:bold; margin-top:6px;">${progress}/1</div>
-                    <button class="btn ${canSpend ? 'success' : ''}" style="width:100%; margin-top:8px;" ${canSpend ? '' : 'disabled'}>
+                    <div class="shard-card-emoji">${card.emoji}</div>
+                    <div class="shard-card-name">${card.name}</div>
+                    <div class="progress-bar"><div class="progress-fill legend-fill" style="width:${Math.min(100, progress * 100)}%"></div></div>
+                    <div class="shard-card-fraction">${progress}/1</div>
+                    <button class="btn ${canSpend ? 'success' : ''}" ${canSpend ? '' : 'disabled'}>
                         ${unlocked ? 'Unlocked' : canSpend ? 'Use 1' : arenaReady ? 'Need shard' : `Arena ${card.arena}`}
                     </button>
                 `;
@@ -1636,8 +1636,13 @@ const MenuLogic = {
     },
     isLocalEnvironment() {
         try {
-            const proto = window.location.protocol;
-            return proto === 'file:';
+            const host = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : '';
+            const proto = (typeof window !== 'undefined' && window.location && window.location.protocol) ? window.location.protocol : '';
+            if (host.includes('github.io')) return false;
+            if (proto === 'file:') return true;
+            if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '0.0.0.0') return true;
+            if (host.startsWith('192.168.') || host.startsWith('10.') || (host.startsWith('172.') && parseInt(host.split('.')[1], 10) >= 16 && parseInt(host.split('.')[1], 10) <= 31) || host.endsWith('.local')) return true;
+            return false;
         } catch (e) {
             return false;
         }

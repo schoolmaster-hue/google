@@ -307,11 +307,21 @@
             }
         }
 
+        /* Anti-Copy Protection */
+        * {
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+            user-select: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-user-drag: none;
+        }
+
         /* Deck & Cards */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .card-item {
@@ -319,12 +329,15 @@
             border: 3px solid #1a252f;
             border-radius: 10px;
             text-align: center;
-            padding: 10px 5px;
+            padding: 8px 4px;
             position: relative;
             cursor: pointer;
             box-shadow: 0 4px 0 #1a252f;
             transition: transform 0.1s;
-            min-height: 105px;
+            aspect-ratio: 0.72;
+            min-height: 82px;
+            max-height: 110px;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -444,7 +457,44 @@
 
         /* EVO Slots & Deck Slots: Match collection dimensions exactly */
         .card-item.deck-slot {
-            min-height: 105px;
+            aspect-ratio: 0.72;
+            min-height: 82px;
+            max-height: 110px;
+            width: 100%;
+        }
+
+        /* Responsive inventory on smaller/compact mobile screens */
+        @media (max-width: 420px), (max-height: 700px) {
+            .card-grid {
+                gap: 6px;
+            }
+            .card-item {
+                padding: 5px 2px;
+                border-width: 2px;
+                border-radius: 8px;
+                box-shadow: 0 3px 0 #1a252f;
+            }
+            .card-item .emoji {
+                font-size: 1.7rem;
+            }
+            .card-item .elixir {
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+                top: -6px;
+                left: -6px;
+            }
+            .card-item .lvl {
+                font-size: 0.65rem;
+                padding: 1px 5px;
+                bottom: -6px;
+            }
+            .card-item.deck-slot.evo-slot {
+                border-width: 2px !important;
+            }
+            .card-item.deck-slot.evo-activated {
+                border-width: 2px !important;
+            }
         }
 
         .card-item.deck-slot.evo-slot {
@@ -1983,6 +2033,183 @@
                 opacity: 0;
             }
         }
+
+        /* ================= RESPONSIVE CHEST REWARDS & MODAL SCALING ================= */
+        #reward-modal .panel {
+            max-width: 440px;
+            width: 92%;
+            max-height: 88vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        #reward-modal #reward-content {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-right: 4px;
+        }
+
+        #reward-modal .reward-btn-continue {
+            flex-shrink: 0;
+            margin-top: 16px;
+        }
+
+        @media (max-height: 700px), (max-width: 420px) {
+            #reward-modal .panel {
+                padding: 14px !important;
+                max-height: 92vh !important;
+            }
+
+            #reward-modal #reward-title {
+                font-size: 1.8rem !important;
+                margin-bottom: 12px !important;
+            }
+
+            #reward-modal #reward-content {
+                gap: 8px !important;
+            }
+
+            #reward-modal .reward-item {
+                padding: 10px 14px !important;
+                gap: 12px !important;
+                font-size: 1.1rem !important;
+            }
+
+            #reward-modal .reward-item span:first-child {
+                font-size: 1.8rem !important;
+            }
+
+            #reward-modal .reward-btn-continue {
+                font-size: 1.1rem !important;
+                padding: 10px !important;
+                margin-top: 12px !important;
+            }
+
+            #chest-unbox-modal .chest-container {
+                padding: 12px !important;
+                max-height: 94vh !important;
+            }
+
+            #chest-unbox-title {
+                font-size: 1.6rem !important;
+                margin-bottom: 4px !important;
+            }
+
+            #chest-unbox-hint {
+                font-size: 0.85rem !important;
+                margin-bottom: 8px !important;
+            }
+
+            #chest-unbox-emoji {
+                font-size: 5rem !important;
+                margin: 6px 0 !important;
+            }
+
+            #chest-stars-container {
+                margin: 8px 0 6px 0 !important;
+            }
+
+            .chest-star {
+                font-size: 1.8rem !important;
+            }
+        }
+
+        /* ================= SHARD INVENTORY CARD STYLING ================= */
+        .shard-card {
+            background: #243342;
+            border: 2px solid #1a252f;
+            border-radius: 10px;
+            padding: 10px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            min-height: 160px;
+            box-shadow: 0 4px 0 #1a252f;
+            box-sizing: border-box;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+        }
+
+        .shard-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .shard-card.evo {
+            border-color: #9b59b6;
+            box-shadow: 0 4px 0 #8e44ad, 0 0 10px rgba(155, 89, 182, 0.3);
+        }
+
+        .shard-card.legendary {
+            border-color: #f1c40f;
+            box-shadow: 0 4px 0 #f39c12, 0 0 10px rgba(241, 196, 15, 0.3);
+        }
+
+        .shard-card .shard-card-emoji {
+            font-size: 2.2rem;
+            line-height: 1;
+            margin: 4px 0 6px 0;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
+        .shard-card .shard-card-name {
+            font-size: 0.8rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 1px 2px #000;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        .shard-card .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #111;
+            border-radius: 4px;
+            border: 1px solid #000;
+            overflow: hidden;
+            margin: 6px 0 3px 0;
+        }
+
+        .shard-card .shard-card-fraction {
+            font-size: 0.72rem;
+            font-weight: 900;
+            color: #ecf0f1;
+            margin-bottom: 6px;
+        }
+
+        .shard-card .btn {
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 6px 8px;
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        @media (max-width: 420px), (max-height: 700px) {
+            .shard-card {
+                padding: 8px 6px;
+                min-height: 145px;
+            }
+            .shard-card .shard-card-emoji {
+                font-size: 1.8rem;
+                margin: 2px 0 4px 0;
+            }
+            .shard-card .shard-card-name {
+                font-size: 0.75rem;
+            }
+            .shard-card .btn {
+                font-size: 0.7rem;
+                padding: 5px 6px;
+            }
+        }
     </style>
 </head>
 
@@ -2118,9 +2345,32 @@
                 <div class="panel">
                     <h2>📧 Messages & Updates</h2>
                     <div style="background: #111; padding: 15px; border-radius: 10px; border: 2px solid #333; max-height: 320px; overflow-y: auto;">
+                        <!-- UPDATE LOG: OCTOBER 8, 2026 (AIR COMBAT, OVERTIME TIEBREAKER, FIVE SERVER & ANTI-THEFT) -->
+                        <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #444;">
+                            <p style="color: #888; font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">📅 October 8, 2026 - LATEST</p>
+                            <div style="margin-bottom: 10px;">
+                                <p style="color: #3498db; font-weight: bold; margin-bottom: 4px;">🦅 AIR COMBAT RULES, OVERTIME TIEBREAKER, FIVE SERVER & RESPONSIVE INVENTORY UPDATE!</p>
+                                <p style="color: #ddd; font-size: 0.88rem; line-height: 1.4;">
+                                    • <strong>Ground Melee vs Air Combat Rules:</strong> Ground melee troops can no longer attack flying air units (Minions, Baby Dragon, Minion Horde, Inferno Dragon, Mega Minion) and will pathfind to ground units, towers, or buildings. Ranged units, spells, towers, and flying units continue targeting air units normally.<br>
+                                    • <strong>Melee Splash & Slam Protection:</strong> Melee splash damage (e.g. Valkyrie) and Mega Knight crater slams strictly ignore airborne targets.<br>
+                                    • <strong>Air Elevation & Dynamic Shadows:</strong> Flying air units now render a distinct ground shadow directly beneath them and hover with a smooth animated aerial bob.<br>
+                                    • <strong>River Flight Pathing:</strong> Air units now soar directly over the river in a straight line without bottlenecking at bridges.<br>
+                                    • <strong>Sudden Death in Overtime:</strong> In Overtime, taking a single tower ends the match instantly with a sudden-death victory.<br>
+                                    • <strong>Tiebreaker Tower HP Drain:</strong> If Overtime expires in a tie, every active tower steadily counts down HP until the lowest-health tower falls, awarding an immediate victory.<br>
+                                    • <strong>Hand UI Selection Flicker Fix:</strong> Card selection in battle is now completely smooth with no DOM recreation, eliminating card flashes or reloads.<br>
+                                    • <strong>Responsive Inventory & EVO Slots:</strong> Deck and inventory card slots now use responsive aspect ratios and scaling, keeping EVO slots and cards perfectly proportioned on smaller and mobile screens.<br>
+                                    • <strong>Five Server Local Testing:</strong> The Debug Menu button is fully accessible when running on Five Server (127.0.0.1 / localhost) and file protocol, while staying hidden on remote GitHub Pages.<br>
+                                    • <strong>Anti-Copy & Code Protection:</strong> Disabled text selection, right-click context menu, DevTools keyboard shortcuts, and drag-and-drop copying.<br>
+                                    • <strong>Chest Rewards & Unboxing Mobile Scaling:</strong> Chest reward popup and opening animation are now fully responsive on smaller and mobile screens with scrollable reward items and guaranteed visible, accessible Continue ("Awesome!") buttons.<br>
+                                    • <strong>Legendary Wildcards Renaming:</strong> Corrected wildcard inventory label to "Legendary Wildcards".<br>
+                                    • <strong>Shard Inventory UI Layout & Arena Unlock Gating:</strong> Cleaned up the Shard Inventory cards so they no longer stretch, overlap, or clip. The Shard Inventory panel is completely hidden until unlocking Evolution cards at Arena 2 (300+ Trophies).
+                                </p>
+                            </div>
+                        </div>
+
                         <!-- UPDATE LOG: AUGUST 24, 2026 - PART 3 (CHEST UNBOX, PASS ROYALE & PREVIEWS) -->
                         <div style="margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid #444;">
-                            <p style="color: #888; font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">📅 August 24, 2026 - LATEST</p>
+                            <p style="color: #888; font-size: 0.8rem; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">📅 August 24, 2026</p>
                             <div style="margin-bottom: 10px;">
                                 <p style="color: #f1c40f; font-weight: bold; margin-bottom: 4px;">👑 FULLSCREEN CHEST UNBOXING, PASS ROYALE OVERHAUL & UNIVERSAL PREVIEWS!</p>
                                 <p style="color: #ddd; font-size: 0.88rem; line-height: 1.4;">
@@ -2428,16 +2678,16 @@
         <!-- CHEST / REWARDS MODAL -->
         <div id="reward-modal" class="screen modal" style="z-index: 300;">
             <div class="panel"
-                style="text-align: center; max-width: 450px; background: linear-gradient(135deg, #2c3e50, #34495e); border: 3px solid #1a252f; box-shadow: 0 6px 0 #1a252f;">
+                style="text-align: center; max-width: 450px; width: 92%; max-height: 88vh; display: flex; flex-direction: column; overflow: hidden; background: linear-gradient(135deg, #2c3e50, #34495e); border: 3px solid #1a252f; box-shadow: 0 6px 0 #1a252f; padding: 22px;">
                 <h1 id="reward-title"
-                    style="font-size: 2.5rem; color: #f1c40f; text-shadow: 0 3px 0 #000; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 2px;">
+                    style="flex-shrink: 0; font-size: 2.5rem; color: #f1c40f; text-shadow: 0 3px 0 #000; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px;">
                     Rewards!</h1>
                 <div id="reward-content"
-                    style="display: flex; flex-direction: column; gap: 15px; font-size: 1.3rem; font-weight: 900; text-shadow: 0 2px 0 #000; color: white;">
+                    style="display: flex; flex-direction: column; gap: 15px; font-size: 1.3rem; font-weight: 900; text-shadow: 0 2px 0 #000; color: white; flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 4px;">
                     <!-- items go here -->
                 </div>
-                <button class="btn"
-                    style="width: 100%; margin-top: 25px; background: linear-gradient(180deg, #2ecc71, #27ae60); font-size: 1.3rem; padding: 15px; border: 3px solid #1a252f; box-shadow: 0 4px 0 #1a252f;"
+                <button class="btn reward-btn-continue"
+                    style="width: 100%; flex-shrink: 0; margin-top: 20px; background: linear-gradient(180deg, #2ecc71, #27ae60); font-size: 1.3rem; padding: 14px; border: 3px solid #1a252f; box-shadow: 0 4px 0 #1a252f;"
                     onclick="document.getElementById('reward-modal').classList.remove('active')">Awesome!</button>
             </div>
         </div>
@@ -5583,8 +5833,13 @@
     <script>
         function isLocalEnvironment() {
             try {
+                const host = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : '';
                 const proto = (typeof window !== 'undefined' && window.location && window.location.protocol) ? window.location.protocol : '';
-                return proto === 'file:';
+                if (host.includes('github.io')) return false;
+                if (proto === 'file:') return true;
+                if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '0.0.0.0') return true;
+                if (host.startsWith('192.168.') || host.startsWith('10.') || (host.startsWith('172.') && parseInt(host.split('.')[1], 10) >= 16 && parseInt(host.split('.')[1], 10) <= 31) || host.endsWith('.local')) return true;
+                return false;
             } catch (e) {
                 return false;
             }
@@ -6832,7 +7087,7 @@
                     { key: 'common', title: 'Common Wildcards', value: GameData.wildcards.common || 0, color: '#adb5bd', emoji: '⬜' },
                     { key: 'rare', title: 'Rare Wildcards', value: GameData.wildcards.rare || 0, color: '#3498db', emoji: '🔷' },
                     { key: 'epic', title: 'Epic Wildcards', value: GameData.wildcards.epic || 0, color: '#9b59b6', emoji: '🔶' },
-                    { key: 'legendary', title: 'Legend Wildcards', value: GameData.wildcards.legendary || 0, color: '#f1c40f', emoji: '🔸' }
+                    { key: 'legendary', title: 'Legendary Wildcards', value: GameData.wildcards.legendary || 0, color: '#f1c40f', emoji: '🔸' }
                 ];
 
                 const summaryDiv = document.getElementById('ui-item-summary');
@@ -6961,14 +7216,14 @@
                         const canSpend = Progression.isUnlocked(card.id) && !unlocked && (GameData.shardInventory.evo || 0) > 0;
                         const evoCard = CARD_DB[card.id + '_evo'] || card;
                         const div = document.createElement('div');
-                        div.className = `card-item ${unlocked ? 'evo' : ''}`;
+                        div.className = `shard-card ${unlocked ? 'evo' : ''}`;
                         div.style.cursor = 'pointer';
                         div.innerHTML = `
-                            <div style="font-size: 2rem; margin: 6px 0;">${evoCard.emoji}</div>
-                            <div style="font-size: 0.75rem; font-weight: 900;">${card.name}</div>
-                            <div class="progress-bar" style="width:100%; margin-top:8px;"><div class="progress-fill shard-fill" style="width:${(progress / 6) * 100}%"></div></div>
-                            <div style="font-size:0.7rem; font-weight:bold; margin-top:6px;">${progress}/6</div>
-                            <button class="btn ${canSpend ? 'success' : ''}" style="width:100%; margin-top:8px;" ${canSpend ? '' : 'disabled'}>
+                            <div class="shard-card-emoji">${evoCard.emoji}</div>
+                            <div class="shard-card-name">${card.name}</div>
+                            <div class="progress-bar"><div class="progress-fill shard-fill" style="width:${Math.min(100, (progress / 6) * 100)}%"></div></div>
+                            <div class="shard-card-fraction">${progress}/6</div>
+                            <button class="btn ${canSpend ? 'success' : ''}" ${canSpend ? '' : 'disabled'}>
                                 ${unlocked ? 'Unlocked' : canSpend ? 'Use 1' : Progression.isUnlocked(card.id) ? 'Need shard' : 'Unlock base card'}
                             </button>
                         `;
@@ -6999,14 +7254,14 @@
                         const unlocked = Progression.isUnlocked(card.id);
                         const canSpend = arenaReady && !unlocked && available > 0;
                         const div = document.createElement('div');
-                        div.className = `card-item ${unlocked ? 'legendary' : ''}`;
+                        div.className = `shard-card ${unlocked ? 'legendary' : ''}`;
                         div.style.cursor = 'pointer';
                         div.innerHTML = `
-                            <div style="font-size: 2rem; margin: 6px 0;">${card.emoji}</div>
-                            <div style="font-size: 0.75rem; font-weight: 900;">${card.name}</div>
-                            <div class="progress-bar" style="width:100%; margin-top:8px;"><div class="progress-fill legend-fill" style="width:${progress * 100}%"></div></div>
-                            <div style="font-size:0.7rem; font-weight:bold; margin-top:6px;">${progress}/1</div>
-                            <button class="btn ${canSpend ? 'success' : ''}" style="width:100%; margin-top:8px;" ${canSpend ? '' : 'disabled'}>
+                            <div class="shard-card-emoji">${card.emoji}</div>
+                            <div class="shard-card-name">${card.name}</div>
+                            <div class="progress-bar"><div class="progress-fill legend-fill" style="width:${Math.min(100, progress * 100)}%"></div></div>
+                            <div class="shard-card-fraction">${progress}/1</div>
+                            <button class="btn ${canSpend ? 'success' : ''}" ${canSpend ? '' : 'disabled'}>
                                 ${unlocked ? 'Unlocked' : canSpend ? 'Use 1' : arenaReady ? 'Need shard' : `Arena ${card.arena}`}
                             </button>
                         `;
@@ -7866,8 +8121,13 @@
             },
             isLocalEnvironment() {
                 try {
-                    const proto = window.location.protocol;
-                    return proto === 'file:';
+                    const host = (typeof window !== 'undefined' && window.location && window.location.hostname) ? window.location.hostname : '';
+                    const proto = (typeof window !== 'undefined' && window.location && window.location.protocol) ? window.location.protocol : '';
+                    if (host.includes('github.io')) return false;
+                    if (proto === 'file:') return true;
+                    if (host === 'localhost' || host === '127.0.0.1' || host === '::1' || host === '0.0.0.0') return true;
+                    if (host.startsWith('192.168.') || host.startsWith('10.') || (host.startsWith('172.') && parseInt(host.split('.')[1], 10) >= 16 && parseInt(host.split('.')[1], 10) <= 31) || host.endsWith('.local')) return true;
+                    return false;
                 } catch (e) {
                     return false;
                 }
@@ -11709,6 +11969,37 @@
         };
 
         window.onload = () => Game.init();
+
+        // Anti-Copy & Anti-Theft Code Protection
+        (function() {
+            // Disable right click context menu everywhere
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                return false;
+            }, { capture: true });
+
+            // Disable copy, cut, paste, selectstart, dragstart
+            ['copy', 'cut', 'paste', 'selectstart', 'dragstart'].forEach(function(evt) {
+                document.addEventListener(evt, function(e) {
+                    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+                    e.preventDefault();
+                    return false;
+                }, { capture: true });
+            });
+
+            // Block DevTools shortcuts (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U, Ctrl+S)
+            document.addEventListener('keydown', function(e) {
+                if (
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                    (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.key === 'S' || e.key === 's'))
+                ) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+            }, { capture: true });
+        })();
 
     </script>
 </body>
